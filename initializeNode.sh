@@ -30,8 +30,6 @@ node_modules/
 .DS_Store
 
 dist/
-
-package-lock.json
 EOL
 
 # initialize package.json
