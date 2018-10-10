@@ -96,10 +96,21 @@ module.exports = {
           'css-loader'
         ]
       },
+      {                     
+        test: /\.(js|jsx)$/,
+        exclude: [
+          /node_modules/,
+          /spec/
+        ],
+        loader: "babel-loader",
+        options: {
+          presets: ['es2015']
+        }
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "eslint-loader"
+        use: ["babel-loader", "eslint-loader"]
       }
     ]
   }
@@ -215,6 +226,7 @@ npm install karma-webpack@2.0.13 --save-dev
 npm install karma-jquery@0.2.2 --save-dev
 npm install karma-jasmine-html-reporter@0.2.2 --save-dev
 npm install karma-sourcemap-loader@0.3.7 --save-dev
+npm install karma-coverage@1.1.2 --save-dev
 
 echo Configuring Karma...
 
@@ -235,7 +247,7 @@ module.exports = function(config) {
     exclude: [
     ],
     preprocessors: {
-      'src/*.js': ['webpack', 'sourcemap'],
+      'src/*.js': ['webpack', 'sourcemap', 'coverage'],
       'spec/*spec.js': ['webpack', 'sourcemap']
     },
     plugins: [
@@ -244,9 +256,10 @@ module.exports = function(config) {
       'karma-jasmine',
       'karma-chrome-launcher',
       'karma-jasmine-html-reporter',
-      'karma-sourcemap-loader'
+      'karma-sourcemap-loader',
+      'karma-coverage'
     ],
-    reporters: ['progress', 'kjhtml'],
+    reporters: ['progress', 'kjhtml', 'coverage'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
@@ -257,6 +270,11 @@ module.exports = function(config) {
   })
 }
 EOL
+
+# install babel
+npm install babel-core@6.26.0 --save-dev
+npm install babel-loader@7.1.3 --save-dev
+npm install babel-preset-es2015@6.24.1 --save-dev
 
 # build this project
 npm run build
